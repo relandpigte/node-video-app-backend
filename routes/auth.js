@@ -4,16 +4,6 @@ const bcrypt = require('bcrypt')
 const express = require('express')
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  res.send(await User.find().sort('name'))
-})
-
-router.get('/:id', async (req, res) => {
-  const user = await User.findById(req.params.id)
-  if (!user) return res.status(404).send('User does not exist.')
-  res.send(user)
-})
-
 router.post('/', async (req, res) => {
   const { error } = validateUser(req.body)
   if (error) return res.status(400).send(error.details[0].message)
@@ -22,7 +12,8 @@ router.post('/', async (req, res) => {
   if (!user) return res.status(400).send('Invalid email or password.')
 
   const validPassword = bcrypt.compareSync(req.body.password, user.password)
-  if (!validPassword) res.status(400).send('Invalid email or password....')
+  if (!validPassword)
+    return res.status(400).send('Invalid email or password....')
 
   const token = user.generateAuthToken()
   res.header('x-auth-token', token).send(token)
