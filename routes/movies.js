@@ -4,12 +4,13 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../middleware/auth')
 const validateMovie = require('../middleware/validate')
+const validateObjectId = require('../middleware/validateObjectId')
 
 router.get('/', async (req, res) => {
   res.send(await Movie.find().sort('name'))
 })
 
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', [auth, validateObjectId], async (req, res) => {
   const movie = await Movie.findById(req.params.id)
   if (!movie) return res.status(404).send('Genre not found!')
   res.send(movie)

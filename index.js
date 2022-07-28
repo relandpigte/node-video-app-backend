@@ -4,6 +4,7 @@ const logger = require('./logger/logger')
 const config = require('config')
 
 require('./startup/logging')()
+require('./startup/cors')(app)
 require('./startup/routes')(app)
 require('./startup/db')()
 require('./startup/config')()
