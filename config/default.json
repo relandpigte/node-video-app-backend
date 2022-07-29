@@ -2,5 +2,5 @@
   "jwtPrivateKey": "unsecureKey",
   "db": "mongodb://localhost/vidly",
   "port": "4000",
-  "requiresAuth": false
+  "requiresAuth": true
 }
