@@ -8,7 +8,7 @@
     "test": "vidly_jwtPrivateKey=secretkey PORT=5000 jest --watchAll --verbose --coverage --detectOpenHandles"
   },
   "engines": {
-    "node": "16.16.0"
+    "node": "16.x"
   },
   "keywords": [],
   "author": "",
