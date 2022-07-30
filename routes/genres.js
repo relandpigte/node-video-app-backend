@@ -8,8 +8,7 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-  const genre = await Genre.find().select().sort('name')
-  res.send(_.pick(genre, ['_id', 'name']))
+  res.send(await Genre.find().select('-__v').sort('name'))
 })
 
 router.get('/:id', validateObjectId, async (req, res) => {
@@ -20,9 +19,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
 
 router.post('/', [auth, admin, validateGenre(validate)], async (req, res) => {
   const genre = new Genre({ name: req.body.name })
-  await genre.save()
-
-  res.send(_.pick(genre, ['_id', 'name']))
+  res.send(await genre.save())
 })
 
 router.put(
@@ -32,17 +29,17 @@ router.put(
     const update = { name: req.body.name }
     const genre = await Genre.findByIdAndUpdate(req.params.id, update, {
       new: true,
-    })
+    }).select('-__v')
     if (!genre) return res.status(404).send('Genre not found!')
 
-    res.send(_.pick(genre, ['_id', 'name']))
+    res.send(genre)
   },
 )
 
 router.delete('/:id', [auth, admin, validateObjectId], async (req, res) => {
   const genre = await Genre.findByIdAndDelete(req.params.id)
   if (!genre) return res.status(404).send('Genre not found!')
-  res.send(_.pick(genre, ['_id', 'name']))
+  res.send(genre)
 })
 
 module.exports = router
